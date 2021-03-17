@@ -79,9 +79,9 @@ namespace SpaceShooter
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            // To activate a camera that follows the player, swap the following statements: 
-            _spriteBatch.Begin(transformMatrix: Camera.Instance.Transform);
-            //_spriteBatch.Begin();
+            // To activate/deactivate the camera that follows the player, replace the following statements: 
+            //_spriteBatch.Begin(transformMatrix: Camera.Instance.Transform);
+            _spriteBatch.Begin();
 
             SpriteManager.Instance.Draw(_spriteBatch);
             _spriteBatch.End();

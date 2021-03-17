@@ -36,8 +36,8 @@ namespace SpaceShooter.Manager
             atlases.Add("bullet1", new Animation(content.Load<Texture2D>("bullet1"), 1, 1));
             atlases.Add("green ship", new Animation(content.Load<Texture2D>("greenShip"), 1, 1));
             atlases.Add("explosion1", new Animation(content.Load<Texture2D>("explosion"), 3, 3));
-            atlases.Add("explosion2", new Animation(content.Load<Texture2D>("explosion2"), 1, 8));
-            atlases.Add("explosion3", new Animation(content.Load<Texture2D>("explosion3"), 1, 14));
+            atlases.Add("explosion2", new Animation(content.Load<Texture2D>("Images/explosion2"), 1, 8));
+            atlases.Add("explosion3", new Animation(content.Load<Texture2D>("Images/explosion3"), 1, 14));
             atlases.Add("background1", new Animation(content.Load<Texture2D>("Backgrounds/bg1"), 1, 1));
             atlases.Add("background2", new Animation(content.Load<Texture2D>("Backgrounds/bg2"), 1, 1));
         }
