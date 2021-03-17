@@ -15,7 +15,9 @@ namespace SpaceShooter.Sprites
     public class Sprite : ICloneable
     {
         protected Animation _animation;
+
         protected Animation _explosion;
+
         protected float _rotation;       
 
         public Vector2 Position;

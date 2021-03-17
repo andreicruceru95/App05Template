@@ -61,6 +61,7 @@ namespace SpaceShooter.Sprites
             
             if (currentKey.IsKeyDown(Keys.A))
                 _rotation -= MathHelper.ToRadians(RotationVelocity);
+
             else if (currentKey.IsKeyDown(Keys.D))
                 _rotation += MathHelper.ToRadians(RotationVelocity);           
 
