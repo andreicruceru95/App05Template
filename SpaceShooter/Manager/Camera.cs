@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using SpaceShooter.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceShooter.Manager
 {
@@ -14,8 +10,7 @@ namespace SpaceShooter.Manager
     {
         private static Camera instance;
         public const int SCREEN_HEIGHT = 720;
-        public const int SCREEN_WIDTH = 1080;
-        
+        public const int SCREEN_WIDTH = 1280;
         public Matrix Transform { get; protected set; }
 
         /// <summary>

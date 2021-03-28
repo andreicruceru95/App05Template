@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpaceShooter.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceShooter.Manager
 {
@@ -13,10 +9,29 @@ namespace SpaceShooter.Manager
     /// </summary>
     public class Animation
     {
+        //public int CurrentFrame { get; set; }
+        //public int FrameCount { get; set; }
+        //public float FrameSpeed { get; set; }
+        //public int Rows { get; set; }
+        //public int Columns { get; set; }
+        //public bool IsLoping { get; set; }
+        //public Texture2D Image { get; set; }
+
+        //public Animation(Texture2D image, int rows, int col)
+        //{
+        //    Image = image;
+        //    Rows = rows;
+        //    Columns = col;
+        //    FrameCount = rows * col;
+        //    IsLoping = true;
+        //    FrameSpeed = 0.2f;
+        //}
+
         public Texture2D Texture;
         public int Rows { get; set; }
         public int Columns { get; set; }
-        public bool IsActive { get; set; } = false;
+        public bool IsPlaying { get; set; }
+        public bool IsLooping { get; set; }
         public Rectangle SourceRectangle { get; private set; }
 
         private int currentFrame;
@@ -24,6 +39,7 @@ namespace SpaceShooter.Manager
 
         public int CurrentFrame
         {
+            set { currentFrame = value; }
             get
             {
                 return currentFrame;
@@ -51,30 +67,38 @@ namespace SpaceShooter.Manager
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-            if (IsActive)
+            if (IsPlaying)
                 currentFrame++;
 
             if (currentFrame == totalFrames)
                 currentFrame = 0;
+
+            UpdateFrame();
         }
-        /// <summary>
-        /// Draw image.
-        /// Create a frame as a rectangle and draw it instead of the full image.
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="location"></param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 location)
+
+        private void UpdateFrame()
         {
             int width = Texture.Width / Columns;
             int height = Texture.Height / Rows;
             int row = (int)((float)currentFrame / (float)Columns);
             int column = currentFrame % Columns;
 
-
             SourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
-
-            spriteBatch.Draw(Texture, destinationRectangle, SourceRectangle, Color.White);
         }
+
+        
+        //public void Draw(SpriteBatch spriteBatch, Vector2 location)
+        //{
+        //    int width = Texture.Width / Columns;
+        //    int height = Texture.Height / Rows;
+        //    int row = (int)((float)currentFrame / (float)Columns);
+        //    int column = currentFrame % Columns;
+
+
+        //    SourceRectangle = new Rectangle(width * column, height * row, width, height);
+        //    Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
+
+        //    spriteBatch.Draw(Texture, destinationRectangle, SourceRectangle, Color.White);
+        //}
     }
 }

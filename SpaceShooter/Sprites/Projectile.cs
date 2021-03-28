@@ -13,13 +13,11 @@ namespace SpaceShooter.Sprites
     /// </summary>
     public class Projectile : Sprite
     {
-        public float LifeSpan = 0f;
-
-        private float _timer;
+        private float _timer;        
         public Projectile() 
         {
-            _animation = TextureManager.Instance.GetTexture("bullet1");
-            
+            Animation = TextureManager.Instance.GetTexture("bullet1");
+            Damage = 50;
 
             base.Initialize();
         }
@@ -30,27 +28,33 @@ namespace SpaceShooter.Sprites
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="sprites"></param>
-        public override void Update(GameTime gameTime, List<Sprite> sprites)
+        public override void Update(GameTime gameTime)
         {
-            _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;            
+            _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if(_timer > LifeSpan)
+            if (_timer > LifeSpan)
             {
                 LinearVelocity = 0;
-                _animation = _explosion;
-                _animation.IsActive = true;
+                Animation = Explosion;
+                Animation.IsPlaying = true;
 
-                if(_animation.CurrentFrame == (_animation.Rows * _animation.Columns) -1)
+                if (Animation.CurrentFrame == (Animation.Rows * Animation.Columns) - 1)
+                {
                     IsRemoved = true;
+                }
             }
 
             Position += Direction * LinearVelocity;
-            _animation.Update(gameTime);
+            Animation.Update(gameTime);
         }
-
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void OnColide(Sprite sprite)
         {
-            _animation.Draw(spriteBatch, Position);
+            if (sprite == this.Parent)
+                return;
+            if (sprite is Projectile)
+                return;
+
+            LifeSpan = 0;
         }
     }
 }
