@@ -16,9 +16,11 @@ namespace SpaceShooter.Sprites
     {
         public Projectile Projectile;
         public int Score { get; set; }
+        public int Ammo { get; set; }
+        public int AmmoToIncrease { get; set; }
 
-        private KeyboardState currentKey;
-        private KeyboardState previousKey;
+        private float timer = 0;
+        private int maxAmmo = 999;
 
         private List<KeyListener> keys;
 
@@ -30,15 +32,16 @@ namespace SpaceShooter.Sprites
             }
         }
 
-        public Ship() : base()
+        public Ship(int maxhealth, int damage) : base(maxhealth, damage)
         {
-            Animation = TextureManager.Instance.GetTexture("green ship");
+            Animation = TextureManager.Instance.GetTexture("ship1");
 
             Score = 0;
 
             LoadKeys();
             base.Initialize();
         }
+        #region Keyboard Response
         private void LoadKeys()
         {
             var left = new KeyListener(Keys.A, true);
@@ -61,10 +64,15 @@ namespace SpaceShooter.Sprites
 
         private void Shoot_Pressed(object sender, EventArgs e)
         {
-            AddProjectile();
-            SoundManager.Instance.PlayEffect("laser");
+            if (Ammo > 0)
+            {
+                AddProjectile();
+                SoundManager.Instance.PlayEffect("laser");
 
-            Score++;
+                Score++;
+                Ammo--;
+            }
+            else SoundManager.Instance.PlayEffect("no ammo");
         }
 
         private void Forward_Pressed(object sender, EventArgs e)
@@ -81,6 +89,7 @@ namespace SpaceShooter.Sprites
         {
             Rotation -= MathHelper.ToRadians(RotationVelocity);
         }
+        #endregion
 
         /// <summary>
         /// Update Ship instance by listening and responding to user's input.
@@ -88,54 +97,21 @@ namespace SpaceShooter.Sprites
         /// <param name="gameTime">Time of game.</param>
         public override void Update(GameTime gameTime)            
         {
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(timer > 1.5f)
+            {
+                timer = 0;
+                CurrentHealth++;
+                Ammo++;
+            }
+            if (Ammo >= maxAmmo) Ammo = maxAmmo;
+
             foreach (var key in keys)
                 key.Update(gameTime);
 
             Direction = new Vector2((float)Math.Cos(Rotation), (float)Math.Sin(Rotation));
-            //previousKey = currentKey;
-            //currentKey = Keyboard.GetState();
-
-            //Move();
-            //Shoot();
-
+            
             base.Update(gameTime);
-        }
-        ///// <summary>
-        ///// Respond to user movement input.
-        ///// </summary>
-        //private void Move()
-        //{            
-        //    if (currentKey.IsKeyDown(Keys.A))
-                
-        //    else if (currentKey.IsKeyDown(Keys.D))
-                
-
-        //    if (currentKey.IsKeyDown(Keys.W))
-        //    {
-        //        LinearVelocity++;
-        //        if (LinearVelocity >= 4)
-        //            LinearVelocity = 4;
-
-                
-        //    }
-
-        //    if (LinearVelocity == 0)
-        //        Animation.IsPlaying = false;
-
-        //}
-        /// <summary>
-        /// Shoot projectiles when user presses space key.
-        /// </summary>
-        private void Shoot()
-        {
-            // this makes sure that each press of space key will shoot only once.
-            if (currentKey.IsKeyDown(Keys.Space) && previousKey.IsKeyUp(Keys.Space))
-            {
-                AddProjectile();
-                SoundManager.Instance.PlayEffect("laser");
-
-                Score++;
-            }
         }
 
         public override void OnColide(Sprite sprite)
@@ -144,24 +120,26 @@ namespace SpaceShooter.Sprites
             {
                 Score += sprite.Damage;
                 sprite.IsRemoved = true;
+                SoundManager.Instance.PlayEffect("coins");
             }
+            if (sprite is Ammunition) return;
+
             LinearVelocity = 0;
 
-            if (Position.X >= sprite.Position.X)
-                Position.X++;
-            else
-                Position.X--;
-            if (Position.Y >= sprite.Position.Y)
-                Position.Y++;
-            else
-                Position.Y--;
+            if (Position.X >= sprite.Position.X) Position.X++;
+            else Position.X--;
+            if (Position.Y >= sprite.Position.Y) Position.Y++;
+            else Position.Y--;
 
-            LinearVelocity = 4;            
+            LinearVelocity = 4;
 
             base.OnColide(sprite);
 
             if (sprite is Asteroid)
+            {
                 sprite.IsRemoved = true;
+                SoundManager.Instance.PlayEffect("flame");
+            }
         }
 
         /// <summary>
@@ -176,6 +154,7 @@ namespace SpaceShooter.Sprites
             projectile.Position = this.Position;
             projectile.LinearVelocity = this.LinearVelocity * 2;
             projectile.LifeSpan = 1.5f;
+            projectile.Rotation = this.Rotation;
             projectile.Parent = this;
 
             Children.Add(projectile);

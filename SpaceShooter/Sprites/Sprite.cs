@@ -15,6 +15,7 @@ namespace SpaceShooter.Sprites
         public Animation Animation { get; set; }
         public Animation Explosion { get; set; }
         public float Rotation { get; set; }
+        public float Scale { get; set; } = 1; 
 
         public List<Sprite> Children { get; set; }
         public Vector2 Position;
@@ -22,7 +23,8 @@ namespace SpaceShooter.Sprites
         public Vector2 Direction;
         public bool IsExploding;
         public float LifeSpan = 0f;
-        public int Health { get; set; }
+        public int CurrentHealth { get; set; }
+        public int MaxHealth { get; set; }
         public int Damage { get; set; }
 
         public float RotationVelocity = 3f;
@@ -50,14 +52,16 @@ namespace SpaceShooter.Sprites
                 return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, Animation.Texture.Width, Animation.Texture.Height);
             }
         }
-
         /// <summary>
         /// Initialize sprite with a given texture.
         /// </summary>
         /// <param name="texture">2D image.</param>
-        public Sprite()
+        public Sprite(int maxHealth, int damage)
         {
-            Children = new List<Sprite>();            
+            Children = new List<Sprite>();
+
+            MaxHealth = CurrentHealth = maxHealth;
+            Damage = damage;
         }
 
         /// <summary>
@@ -77,9 +81,9 @@ namespace SpaceShooter.Sprites
         }
         public override void Update(GameTime gameTime)
         {
-            if (Health <= 0)
-                IsRemoved = true;
+            if (CurrentHealth <= 0) IsRemoved = true;
 
+            if (CurrentHealth >= MaxHealth) CurrentHealth = MaxHealth;
 
             Animation.Update(gameTime);
         }
@@ -91,16 +95,16 @@ namespace SpaceShooter.Sprites
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Animation.Texture, Position, Animation.SourceRectangle, Color.White,
-                Rotation, Origin, 1, SpriteEffects.None, 0);            
+                Rotation, Origin, Scale, SpriteEffects.None, 0);            
         }
         public virtual void OnColide(Sprite sprite)
         {
             if (sprite is Coin)
                 return;
 
-            Health -= sprite.Damage;
-            if(Health < 0)
-                Health = 0;
+            CurrentHealth -= sprite.Damage;
+            if(CurrentHealth < 0)
+                CurrentHealth = 0;
         }
 
         public virtual void SetAnimation(Animation animation)
@@ -118,7 +122,7 @@ namespace SpaceShooter.Sprites
         {
             return this.MemberwiseClone();
         }
-        public bool Intersects(Sprite sprite)
+        public virtual bool Intersects(Sprite sprite)
         {
             // Calculate a matrix which transforms from A's local space into
             // world space and then into B's local space
@@ -149,16 +153,16 @@ namespace SpaceShooter.Sprites
                     if (0 <= xB && xB < sprite.Rectangle.Width &&
                         0 <= yB && yB < sprite.Rectangle.Height)
                     {
-                          // Get the colors of the overlapping pixels
-                            var colourA = this.TextureData[xA + yA * this.Rectangle.Width];
-                            var colourB = sprite.TextureData[xB + yB * sprite.Rectangle.Width];
+                        // Get the colors of the overlapping pixels
+                        var colourA = this.TextureData[xA + yA * this.Rectangle.Width];
+                        var colourB = sprite.TextureData[xB + yB * sprite.Rectangle.Width];
 
-                            // If both pixel are not completely transparent
-                            if (colourA.A != 0 && colourB.A != 0)
-                            {
-                                return true;
-                            }
-                        
+                        // If both pixel are not completely transparent
+                        if (colourA.A != 0 && colourB.A != 0)
+                        {
+                            return true;
+
+                        }
                     }
 
                     // Move to the next pixel in the row

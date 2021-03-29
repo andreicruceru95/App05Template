@@ -44,6 +44,7 @@ namespace SpaceShooter.Manager
             SoundEffects.Add("gameover", content.Load<SoundEffect>("Music/gameover"));
             SoundEffects.Add("reload", content.Load<SoundEffect>("Music/reload"));
             SoundEffects.Add("upgrade", content.Load<SoundEffect>("Music/upgrade"));
+            SoundEffects.Add("no ammo", content.Load<SoundEffect>("Music/no_ammo"));
         }
         /// <summary>
         /// Initialize Singleton.

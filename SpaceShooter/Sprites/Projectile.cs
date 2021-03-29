@@ -14,10 +14,10 @@ namespace SpaceShooter.Sprites
     public class Projectile : Sprite
     {
         private float _timer;        
-        public Projectile() 
+        public Projectile(Animation animation,int maxHealth, int damage) : base(maxHealth, damage) 
         {
-            Animation = TextureManager.Instance.GetTexture("bullet1");
-            Damage = 50;
+            Animation = animation;
+            Animation.TimeBetweenFrames = 0.5f;
 
             base.Initialize();
         }
@@ -37,6 +37,7 @@ namespace SpaceShooter.Sprites
                 LinearVelocity = 0;
                 Animation = Explosion;
                 Animation.IsPlaying = true;
+                Scale = 2f;
 
                 if (Animation.CurrentFrame == (Animation.Rows * Animation.Columns) - 1)
                 {
@@ -49,14 +50,15 @@ namespace SpaceShooter.Sprites
         }
         public override void OnColide(Sprite sprite)
         {
-            if (sprite == this.Parent)
-                return;
-            if (sprite is Projectile)
-                return;
-            if (sprite is Coin)
-                return;
-
             LifeSpan = 0;
+        }
+
+        public override bool Intersects(Sprite sprite)
+        {
+            if (sprite == this.Parent || sprite is Projectile || sprite is Coin)
+                return false;
+            else
+                return base.Intersects(sprite);
         }
     }
 }

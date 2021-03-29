@@ -15,6 +15,8 @@ namespace SpaceShooter.Manager
         private Dictionary<string, Animation> atlases;
 
         public int MaxAsteroids { get; private set; } = 28;
+        public int MaxBullets { get; private set; } = 13;
+        public int MaxShips { get; private set; } = 13;
 
         public static TextureManager Instance
         {
@@ -33,9 +35,7 @@ namespace SpaceShooter.Manager
         {
             atlases = new Dictionary<string, Animation>();
 
-            atlases.Add("bullet1", new Animation(content.Load<Texture2D>("Images/bullet1"), 1, 1));
             atlases.Add("green ship", new Animation(content.Load<Texture2D>("Images/greenShip"), 1, 1));
-            //atlases.Add("asteroid1", new Animation(content.Load<Texture2D>("Images/Asteroid1"), 1, 1));
             atlases.Add("explosion1", new Animation(content.Load<Texture2D>("Images/explosion"), 3, 3));
             atlases.Add("explosion2", new Animation(content.Load<Texture2D>("Images/explosion2"), 1, 8));
             atlases.Add("explosion3", new Animation(content.Load<Texture2D>("Images/explosion3"), 1, 14));
@@ -44,6 +44,23 @@ namespace SpaceShooter.Manager
             atlases.Add("stone50", new Animation(content.Load<Texture2D>("Images/Asteroids/stone50"), 1, 1));
             atlases.Add("stone30", new Animation(content.Load<Texture2D>("Images/Asteroids/stone30"), 1, 1));
 
+            LoadGUI();
+            LoadCoins();
+            LoadAsteroids();
+            LoadBullets();
+            LoadShips();
+        }
+
+        #region Load Textures
+        private void LoadShips()
+        {
+            for (int i = 1; i < MaxShips; i++)
+            {
+                atlases.Add("ship" + i, new Animation(content.Load<Texture2D>("Images/Ships/ship" + i), 1, 1));
+            }
+        }
+        private void LoadGUI()
+        {
             atlases.Add("healthTexture", new Animation(content.Load<Texture2D>("Images/GUI/healthTexture"), 1, 1));
             atlases.Add("Play", new Animation(content.Load<Texture2D>("Images/GUI/Play"), 1, 1));
             atlases.Add("Pause", new Animation(content.Load<Texture2D>("Images/GUI/Pause"), 1, 1));
@@ -52,13 +69,24 @@ namespace SpaceShooter.Manager
             atlases.Add("Reload", new Animation(content.Load<Texture2D>("Images/GUI/Reload"), 1, 1));
             atlases.Add("Health", new Animation(content.Load<Texture2D>("Images/GUI/Health"), 1, 1));
             atlases.Add("Exit", new Animation(content.Load<Texture2D>("Images/GUI/Exit"), 1, 1));
-
-            atlases.Add("coin1", new Animation(content.Load<Texture2D>("Images/Coins/coin_gold"), 1, 8));
-            atlases.Add("coin2", new Animation(content.Load<Texture2D>("Images/Coins/coin_silver"), 1, 8));
-            atlases.Add("coin3", new Animation(content.Load<Texture2D>("Images/Coins/coin_copper"), 1, 8));
-
-            LoadAsteroids();
+            atlases.Add("Mouse", new Animation(content.Load<Texture2D>("Images/GUI/mouse"), 1, 1));
         }
+
+        private void LoadCoins()
+        {
+            atlases.Add("coin3", new Animation(content.Load<Texture2D>("Images/Coins/coin_gold"), 1, 8));
+            atlases.Add("coin2", new Animation(content.Load<Texture2D>("Images/Coins/coin_silver"), 1, 8));
+            atlases.Add("coin1", new Animation(content.Load<Texture2D>("Images/Coins/coin_copper"), 1, 8));
+        }
+
+        private void LoadBullets()
+        {
+            for (int i = 1; i < MaxBullets; i++)
+            {
+                atlases.Add("bullet" + i, new Animation(content.Load<Texture2D>("Images/Projectiles/bullet" + i), 1, 1));
+            }
+        }
+
         private void LoadAsteroids()
         {
             for (int i = 1; i < MaxAsteroids; i++)
@@ -66,6 +94,8 @@ namespace SpaceShooter.Manager
                 atlases.Add("Asteroid" + i, new Animation(content.Load<Texture2D>("Images/Asteroids/Stones2Filled_" + i), 1, 1));
             }
         }
+        #endregion
+                
         /// <summary>
         /// Initialize singleton.
         /// </summary>

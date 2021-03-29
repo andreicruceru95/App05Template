@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SpaceShooter.Manager;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,7 @@ namespace SpaceShooter.Sprites
         private bool _isHovering;
 
         private MouseState _previousMouse;
+        private Rectangle mouseRectangle;
 
         private SpriteFont _font;
         public Color InitialColour { get; set; }
@@ -78,7 +80,7 @@ namespace SpaceShooter.Sprites
             _previousMouse = _currentMouse;
             _currentMouse = Mouse.GetState();
 
-            var mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 1, 1);
+            mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 1, 1);
 
             _isHovering = false;
 

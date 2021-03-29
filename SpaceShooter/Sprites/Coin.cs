@@ -9,16 +9,13 @@ namespace SpaceShooter.Sprites
 {
     public class Coin : Sprite
     {
-        public int Value { get; private set; }
-        public Coin(Animation animation, Vector2 position, int value)
+        public Coin(Animation animation, Vector2 position, int maxHealth, int damage) : base(maxHealth,damage)
         {
             SetAnimation(animation);
             Position = position;
             Rotation = 0;
-            RotationVelocity = 2f;            
-            Damage = 0;
-            Health = 1000;
-            Damage = value;
+            RotationVelocity = 2f;
+            Scale = 1.5f;
 
             Animation.TimeBetweenFrames = 0.2f;
             Animation.IsPlaying = true;
@@ -38,11 +35,14 @@ namespace SpaceShooter.Sprites
             {
                 IsRemoved = true;
                 SpriteManager.Instance.Player.Score += Damage;
-            }
-            if (sprite is Projectile)
-                return;
-            if (sprite is Asteroid)
-                return;
+            }            
+        }
+        public override bool Intersects(Sprite sprite)
+        {
+            if (sprite is Projectile || sprite is Asteroid)
+                return false;
+
+            else return base.Intersects(sprite);
         }
     }
 }

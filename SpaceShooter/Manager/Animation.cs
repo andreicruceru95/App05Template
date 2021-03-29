@@ -78,8 +78,7 @@ namespace SpaceShooter.Manager
                     currentFrame++;
                     timer = 0;
                 }
-            }
-                
+            }                
 
             if (currentFrame == totalFrames)
                 currentFrame = 0;
@@ -96,20 +95,5 @@ namespace SpaceShooter.Manager
 
             SourceRectangle = new Rectangle(width * column, height * row, width, height);
         }
-
-        
-        //public void Draw(SpriteBatch spriteBatch, Vector2 location)
-        //{
-        //    int width = Texture.Width / Columns;
-        //    int height = Texture.Height / Rows;
-        //    int row = (int)((float)currentFrame / (float)Columns);
-        //    int column = currentFrame % Columns;
-
-
-        //    SourceRectangle = new Rectangle(width * column, height * row, width, height);
-        //    Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
-
-        //    spriteBatch.Draw(Texture, destinationRectangle, SourceRectangle, Color.White);
-        //}
     }
 }
