@@ -53,9 +53,9 @@ namespace SpaceShooter.Manager
             atlases.Add("Health", new Animation(content.Load<Texture2D>("Images/GUI/Health"), 1, 1));
             atlases.Add("Exit", new Animation(content.Load<Texture2D>("Images/GUI/Exit"), 1, 1));
 
-            atlases.Add("coin1", new Animation(content.Load<Texture2D>("Images/Coins/coin_gold"), 1, 1));
-            atlases.Add("coin2", new Animation(content.Load<Texture2D>("Images/Coins/coin_silver"), 1, 1));
-            atlases.Add("coin3", new Animation(content.Load<Texture2D>("Images/Coins/coin_copper"), 1, 1));
+            atlases.Add("coin1", new Animation(content.Load<Texture2D>("Images/Coins/coin_gold"), 1, 8));
+            atlases.Add("coin2", new Animation(content.Load<Texture2D>("Images/Coins/coin_silver"), 1, 8));
+            atlases.Add("coin3", new Animation(content.Load<Texture2D>("Images/Coins/coin_copper"), 1, 8));
 
             LoadAsteroids();
         }

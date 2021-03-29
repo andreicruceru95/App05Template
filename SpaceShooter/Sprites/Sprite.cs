@@ -95,6 +95,9 @@ namespace SpaceShooter.Sprites
         }
         public virtual void OnColide(Sprite sprite)
         {
+            if (sprite is Coin)
+                return;
+
             Health -= sprite.Damage;
             if(Health < 0)
                 Health = 0;

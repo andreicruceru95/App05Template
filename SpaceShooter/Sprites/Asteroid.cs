@@ -35,31 +35,21 @@ namespace SpaceShooter.Sprites
             if (Health <= 50)
                 Animation = TextureManager.Instance.GetTexture("stone50");
             if(Health < 30)
-                Animation = TextureManager.Instance.GetTexture("stone30");
+                Animation = TextureManager.Instance.GetTexture("stone30");           
 
-            //if (Health <= 0 && rand.Next(0, 100) > 50)
-            //{
-            //    Explosion = TextureManager.Instance.GetTexture("coin1");
-
-            //    Animation = Explosion;
-            //    Animation.IsPlaying = true;
-            //    LinearVelocity = 0;
-
-            //    if (Animation.CurrentFrame == (Animation.Rows * Animation.Columns) - 1)
-            //    {
-            //        IsRemoved = true;
-            //    }
-            
-            //else
-            //    IsRemoved = true;
-
-            if (Position.X <= 0)
+            if (Position.X + Rectangle.Width <= 0)
                 IsRemoved = true;
+
             base.Update(gameTime);
         }
 
         public override void OnColide(Sprite sprite)
         {
+            if (sprite == SpriteManager.Instance.Player)
+                IsRemoved = true;
+            if (sprite is Coin)
+                return;
+
               base.OnColide(sprite);
         }
     }

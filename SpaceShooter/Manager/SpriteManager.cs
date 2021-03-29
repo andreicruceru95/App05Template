@@ -57,8 +57,8 @@ namespace SpaceShooter.Manager
         private void AddCoins(Vector2 position)
         {
             int coinNumber = rand.Next(1, 3);
-
-            Sprites.Add(new Coin(TextureManager.Instance.GetTexture("coin" + coinNumber), position, coinNumber * 100));
+            if(position.X >= 0 && position.Y >= 0 && position.X < Camera.SCREEN_WIDTH && position.Y < Camera.SCREEN_HEIGHT)
+                Sprites.Add(new Coin(TextureManager.Instance.GetTexture("coin" + coinNumber), position, coinNumber * 100));
         }
         
 
@@ -151,11 +151,12 @@ namespace SpaceShooter.Manager
                 {
                     if (spriteA == spriteB)
                         continue;
+
                     if (spriteA.Animation == spriteA.Explosion ||
                         spriteB.Animation == spriteB.Explosion)
                     {
                         continue;
-                    }                    
+                    }
                     if (spriteA.Rectangle.Intersects(spriteB.Rectangle))
                     {
                         if (spriteA.Intersects(spriteB))
@@ -185,13 +186,18 @@ namespace SpaceShooter.Manager
                 {
                     if(Sprites[i] is Asteroid)
                     {
-                        AddCoins(Sprites[i].Position);
+                        SpawnCoins(Sprites[i] as Asteroid);
                     }
 
                     Sprites.RemoveAt(i);
                     i--;
                 }
             }
+        }
+        private void SpawnCoins(Asteroid asteroid)
+        {
+            if(rand.Next(0,100) >= 70)
+                AddCoins(asteroid.Position);
         }
         /// <summary>
         /// Load Content.
@@ -210,7 +216,6 @@ namespace SpaceShooter.Manager
                 SetupAsteroid();
                 timer = 0;
             }
-
 
             UpdateBackground();
             UpdateSprites(gameTime);

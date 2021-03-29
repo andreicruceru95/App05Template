@@ -33,9 +33,11 @@ namespace SpaceShooter.Manager
         public bool IsPlaying { get; set; }
         public bool IsLooping { get; set; }
         public Rectangle SourceRectangle { get; private set; }
+        public float TimeBetweenFrames { get; set; } = 0;
 
         private int currentFrame;
         private int totalFrames;
+        private float timer;
 
         public int CurrentFrame
         {
@@ -58,7 +60,7 @@ namespace SpaceShooter.Manager
             Columns = columns;
             currentFrame = 0;
             totalFrames = Rows * Columns;
-            SourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            SourceRectangle = new Rectangle(0, 0, texture.Width/columns, texture.Height/rows);
         }
 
         /// <summary>
@@ -68,7 +70,16 @@ namespace SpaceShooter.Manager
         public void Update(GameTime gameTime)
         {
             if (IsPlaying)
-                currentFrame++;
+            { 
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (timer >= TimeBetweenFrames)
+                {
+                    currentFrame++;
+                    timer = 0;
+                }
+            }
+                
 
             if (currentFrame == totalFrames)
                 currentFrame = 0;

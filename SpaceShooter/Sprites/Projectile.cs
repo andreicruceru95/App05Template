@@ -53,6 +53,8 @@ namespace SpaceShooter.Sprites
                 return;
             if (sprite is Projectile)
                 return;
+            if (sprite is Coin)
+                return;
 
             LifeSpan = 0;
         }
