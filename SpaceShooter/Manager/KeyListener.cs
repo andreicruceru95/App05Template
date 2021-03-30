@@ -38,8 +38,8 @@ namespace SpaceShooter.Manager
                 }
             }
             else if(currentKey.IsKeyDown(key))
-            {
-                Pressed?.Invoke(this, new EventArgs());
+            {                
+                Pressed?.Invoke(this, new EventArgs());                
             }
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

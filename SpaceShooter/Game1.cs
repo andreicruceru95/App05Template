@@ -24,7 +24,8 @@ namespace SpaceShooter
         private SpriteBatch _spriteBatch;
         private SpriteBatch _fixedText;
        
-        private Texture2D healthTexture;
+        private Texture2D healthTexture, mouseActive;        
+
         private Vector2 healthPosition;
         private Button reload, points, projectile;
         private Rectangle healthRectangle, healthIconRectangle;
@@ -33,7 +34,7 @@ namespace SpaceShooter
         private bool IsOver;
         private GameStates gameState;
 
-        private List<Component> components;
+        private List<Component> components;        
 
         #endregion
 
@@ -61,12 +62,13 @@ namespace SpaceShooter
             ContentLoader.Instance.Initialize(Content);
             SoundManager.Instance.Initialize();
             TextureManager.Instance.Initialize();
-            SpriteManager.Instance.Initialize();
+            SpriteManager.Instance.Initialize(_graphics.GraphicsDevice);
 
             SoundManager.Instance.PlayMusic("background1");
 
-            Texture2D mouse = TextureManager.Instance.GetTexture("Mouse").Texture;
-            Mouse.SetCursor(MouseCursor.FromTexture2D(mouse, mouse.Width / 2, mouse.Height / 2));
+            //mouse = TextureManager.Instance.GetTexture("Mouse").Texture;
+            mouseActive = TextureManager.Instance.GetTexture("Mouse Active").Texture;
+            Mouse.SetCursor(MouseCursor.FromTexture2D(mouseActive, mouseActive.Width / 2, mouseActive.Height / 2));
 
             base.Initialize();
         }
@@ -84,6 +86,8 @@ namespace SpaceShooter
             healthPosition = new Vector2(100, Camera.SCREEN_HEIGHT - 100);
             healthTexture = TextureManager.Instance.GetTexture("Health").Texture;            
             healthIconRectangle = new Rectangle((int)healthPosition.X, (int)healthPosition.Y, 50, 50);
+
+            //SetRectangleTexture(_graphics.GraphicsDevice, SpriteManager.Instance.Player.Animation.Texture);
 
             AssignEvents();
         }
@@ -133,8 +137,11 @@ namespace SpaceShooter
 
         private void Reload_Click(object sender, System.EventArgs e)
         {
-            SpriteManager.Instance.AddPlayer();
-            IsOver = false;
+            if (IsOver)
+            {
+                SpriteManager.Instance.AddPlayer();
+                IsOver = false;
+            }
         }
         private void Music_Click(object sender, System.EventArgs e)
         {
@@ -219,52 +226,52 @@ namespace SpaceShooter
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
         {
-            if (gameState == GameStates.Play)
+
+            string playerHealth = $"{SpriteManager.Instance.Player.CurrentHealth} / {SpriteManager.Instance.Player.MaxHealth}";
+            GraphicsDevice.Clear(Color.Black);
+            // To activate/deactivate the camera that follows the player, replace the following statements: 
+            //_spriteBatch.Begin(transformMatrix: Camera.Instance.Transform);
+            _spriteBatch.Begin();
+
+            SpriteManager.Instance.Draw(gameTime, _spriteBatch);
+            
+            _spriteBatch.End();
+
+            _fixedText.Begin();
+
+            foreach (var btn in components)
             {
-                string playerHealth = $"{SpriteManager.Instance.Player.CurrentHealth} / {SpriteManager.Instance.Player.MaxHealth}";
-                GraphicsDevice.Clear(Color.Black);
-                // To activate/deactivate the camera that follows the player, replace the following statements: 
-                //_spriteBatch.Begin(transformMatrix: Camera.Instance.Transform);
-                _spriteBatch.Begin();
-
-                SpriteManager.Instance.Draw(gameTime, _spriteBatch);
-                _spriteBatch.End();
-
-                _fixedText.Begin();
-
-                foreach (var btn in components)
-                {
-                    btn.Draw(gameTime, _fixedText);
-                }
-                //draw ammo icon and ammo amount.
-                projectile.Draw(gameTime, _fixedText);
-                _fixedText.DrawString(FontManager.Instance.Arial, $"{SpriteManager.Instance.Player.Ammo}",
-                    new Vector2(2 * projectile.Rectangle.Width, projectile.Rectangle.Height / 2), Color.White);
-
-                // draw health icon, rectangle and health amount.
-                _fixedText.Draw(healthTexture, healthIconRectangle, Color.MistyRose);
-                _fixedText.Draw(TextureManager.Instance.GetTexture("healthTexture").Texture, healthRectangle, Color.White);
-                _fixedText.DrawString(FontManager.Instance.Arial, playerHealth,
-                    new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(playerHealth).X / 2, healthPosition.Y), Color.MistyRose);
-                //draw score.
-                _fixedText.DrawString(FontManager.Instance.Arial, $"{SpriteManager.Instance.Player.Score}",
-                    new Vector2(points.Position.X + points.Rectangle.Width, points.Rectangle.Height / 2), Color.White);
-
-                _fixedText.DrawString(FontManager.Instance.TimesNewRoman, $"Author : Andrei Cruceru",
-                    new Vector2(10, Camera.SCREEN_HEIGHT - 20), Color.White);
-
-                if (IsOver)
-                {
-                    _fixedText.DrawString(FontManager.Instance.Arial, gameOver, new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(gameOver).X / 2,
-                        Camera.SCREEN_HEIGHT / 2 - FontManager.Instance.Arial.MeasureString(gameOver).Y), Color.White);
-
-                    reload.Draw(gameTime, _fixedText);
-                }
-
-                _fixedText.End();
-
-                base.Draw(gameTime);
+                btn.Draw(gameTime, _fixedText);
             }
+            //draw ammo icon and ammo amount.
+            projectile.Draw(gameTime, _fixedText);
+            _fixedText.DrawString(FontManager.Instance.Arial, $"{SpriteManager.Instance.Player.Ammo}",
+                new Vector2(2 * projectile.Rectangle.Width, projectile.Rectangle.Height / 2), Color.White);
+
+            // draw health icon, rectangle and health amount.
+            _fixedText.Draw(healthTexture, healthIconRectangle, Color.MistyRose);
+            _fixedText.Draw(TextureManager.Instance.GetTexture("healthTexture").Texture, healthRectangle, Color.White);
+            _fixedText.DrawString(FontManager.Instance.Arial, playerHealth,
+                new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(playerHealth).X / 2, healthPosition.Y), Color.MistyRose);
+            //draw score.
+            _fixedText.DrawString(FontManager.Instance.Arial, $"{SpriteManager.Instance.Player.Score}",
+                new Vector2(points.Position.X + points.Rectangle.Width, points.Rectangle.Height / 2), Color.White);
+
+            _fixedText.DrawString(FontManager.Instance.TimesNewRoman, $"Author : Andrei Cruceru",
+                new Vector2(10, Camera.SCREEN_HEIGHT - 20), Color.White);
+
+            if (IsOver)
+            {
+                _fixedText.DrawString(FontManager.Instance.Arial, gameOver, new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(gameOver).X / 2,
+                    Camera.SCREEN_HEIGHT / 2 - FontManager.Instance.Arial.MeasureString(gameOver).Y), Color.White);
+
+                reload.Draw(gameTime, _fixedText);
+            }
+
+            _fixedText.End();
+
+            base.Draw(gameTime);
+
         }
         #endregion
     }

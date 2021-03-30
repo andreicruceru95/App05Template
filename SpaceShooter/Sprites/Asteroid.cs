@@ -38,7 +38,8 @@ namespace SpaceShooter.Sprites
             healthRectangle = new Rectangle((int)Position.X - (CurrentHealth / 2), (int)Position.Y, CurrentHealth, 5);
 
             Rotation += MathHelper.ToRadians(RotationVelocity);
-            Position += (Direction * LinearVelocity) * timer;
+            Position += (Direction * LinearVelocity);// * timer;
+            timer = 0;
 
             if (CurrentHealth <= 50)
                 Animation = TextureManager.Instance.GetTexture("stone50");
@@ -58,23 +59,28 @@ namespace SpaceShooter.Sprites
             spriteBatch.Draw(healthTexture, healthRectangle, Color.White);
         }
 
-        public override void OnColide(Sprite sprite)
+        public override void OnColide(Sprite sprite) 
         {
-            if (sprite is Ship) IsRemoved = true;
-
             base.OnColide(sprite);
 
-            if (sprite is Projectile && sprite.Parent == SpriteManager.Instance.Player && CurrentHealth <= 0)
+            if (sprite is Ship)
             {
-                SpriteManager.Instance.Player.Score += 10;
-                SoundManager.Instance.PlayEffect("flame");
+                CurrentHealth = 0;
+                IsRemoved = true;
             }
+
+            if (CurrentHealth <= 0 && (sprite.Parent == SpriteManager.Instance.Player || sprite == SpriteManager.Instance.Player))
+            {
+                SpriteManager.Instance.Player.Score += 10;                
+            }
+
+            if(IsRemoved || CurrentHealth <= 0) SoundManager.Instance.PlayEffect("flame");
         }
         public override bool Intersects(Sprite sprite)
-        {            
-            if (sprite is Coin) return false;           
-
-            else return base.Intersects(sprite);
+        {
+            if (sprite.Parent == SpriteManager.Instance.Player || sprite == SpriteManager.Instance.Player) 
+                return base.Intersects(sprite);
+            else return false;
         }
     }
 }

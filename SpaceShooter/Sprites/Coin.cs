@@ -17,7 +17,7 @@ namespace SpaceShooter.Sprites
             RotationVelocity = 2f;
             Scale = 1.5f;
 
-            Animation.TimeBetweenFrames = 0.2f;
+            Animation.TimeBetweenFrames = 1f;
             Animation.IsPlaying = true;
         }
 
@@ -35,14 +35,15 @@ namespace SpaceShooter.Sprites
             {
                 IsRemoved = true;
                 SpriteManager.Instance.Player.Score += Damage;
-            }            
+            }
+
+            if(IsRemoved) SoundManager.Instance.PlayEffect("coins");
         }
         public override bool Intersects(Sprite sprite)
         {
-            if (sprite is Projectile || sprite is Asteroid)
-                return false;
+            if (sprite == SpriteManager.Instance.Player) return base.Intersects(sprite);
 
-            else return base.Intersects(sprite);
+            else return false;
         }
     }
 }

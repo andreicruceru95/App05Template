@@ -70,6 +70,7 @@ namespace SpaceShooter.Manager
             atlases.Add("Health", new Animation(content.Load<Texture2D>("Images/GUI/Health"), 1, 1));
             atlases.Add("Exit", new Animation(content.Load<Texture2D>("Images/GUI/Exit"), 1, 1));
             atlases.Add("Mouse", new Animation(content.Load<Texture2D>("Images/GUI/mouse"), 1, 1));
+            atlases.Add("Mouse Active", new Animation(content.Load<Texture2D>("Images/GUI/mouse_active"), 1, 1));
         }
 
         private void LoadCoins()
@@ -116,3 +117,4 @@ namespace SpaceShooter.Manager
         }
     }
 }
+ww

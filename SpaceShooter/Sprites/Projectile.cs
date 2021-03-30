@@ -32,7 +32,8 @@ namespace SpaceShooter.Sprites
         {
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (_timer > LifeSpan)
+            if (_timer > LifeSpan) IsExploding = true;
+            if (IsExploding)
             {
                 LinearVelocity = 0;
                 Animation = Explosion;
@@ -50,15 +51,14 @@ namespace SpaceShooter.Sprites
         }
         public override void OnColide(Sprite sprite)
         {
-            LifeSpan = 0;
+            IsExploding = true;// will trigger explosion.
         }
 
         public override bool Intersects(Sprite sprite)
         {
-            if (sprite == this.Parent || sprite is Projectile || sprite is Coin)
-                return false;
-            else
-                return base.Intersects(sprite);
+            if (Parent == sprite) return false;
+            else if (sprite is Asteroid || sprite is Ship) return base.Intersects(sprite);            
+            else return false;
         }
     }
 }

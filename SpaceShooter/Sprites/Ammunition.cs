@@ -8,16 +8,12 @@ namespace SpaceShooter.Sprites
 {
     public class Ammunition : Projectile
     {
-        private float timer = 0;
-
         public Ammunition(Animation animation,int maxHealth, int damage) : base(animation, maxHealth, damage)
         {}
         public override void Update(GameTime gameTime)
         {
-            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             Rotation += MathHelper.ToRadians(RotationVelocity);
-            Position += (Direction * LinearVelocity) * timer;
+            Position += (Direction * LinearVelocity);
 
             if(Position.X + Rectangle.Width < 0)
                 IsRemoved = true;
@@ -31,11 +27,7 @@ namespace SpaceShooter.Sprites
 
         public override void OnColide(Sprite sprite)
         {
-            if(sprite == SpriteManager.Instance.Player)
-            {
-                SpriteManager.Instance.ChangeProjectile(this);
-                IsRemoved = true;
-            }
+            //if(sprite == SpriteManager.Instance.Player) IsRemoved = true;            
         }
     }
 }

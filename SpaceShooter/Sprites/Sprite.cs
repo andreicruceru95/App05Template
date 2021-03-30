@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SpaceShooter.Manager;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SpaceShooter.Sprites
 {
@@ -34,7 +35,7 @@ namespace SpaceShooter.Sprites
 
         public bool IsRemoved = false;
         public Color[] TextureData;
-
+        
         public Random rand = new Random();
         public Matrix Transform
         {
@@ -50,6 +51,13 @@ namespace SpaceShooter.Sprites
             get
             {
                 return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, Animation.Texture.Width, Animation.Texture.Height);
+            }
+        }
+        public Texture2D Texture
+        {
+            get
+            {
+                return Animation.Texture;
             }
         }
         /// <summary>
@@ -85,6 +93,19 @@ namespace SpaceShooter.Sprites
 
             if (CurrentHealth >= MaxHealth) CurrentHealth = MaxHealth;
 
+            if (IsExploding)
+            {
+                LinearVelocity = 0;
+                Animation = Explosion;
+                Animation.IsPlaying = true;
+                Scale = 2f;
+
+                if (Animation.CurrentFrame == (Animation.Rows * Animation.Columns) - 1)
+                {
+                    IsRemoved = true;
+                }
+            }
+
             Animation.Update(gameTime);
         }
 
@@ -99,12 +120,14 @@ namespace SpaceShooter.Sprites
         }
         public virtual void OnColide(Sprite sprite)
         {
-            if (sprite is Coin)
-                return;
-
             CurrentHealth -= sprite.Damage;
-            if(CurrentHealth < 0)
+
+            if (CurrentHealth <= 0)
+            {
                 CurrentHealth = 0;
+                IsRemoved = true;
+            }
+            if (sprite is Projectile) sprite.IsExploding = true;
         }
 
         public virtual void SetAnimation(Animation animation)
@@ -124,6 +147,50 @@ namespace SpaceShooter.Sprites
         }
         public virtual bool Intersects(Sprite sprite)
         {
+            int pixelsCalculated = 0;
+
+            if (this != SpriteManager.Instance.Player)
+            {
+                if (sprite is Coin || sprite is Ammunition) 
+                    return false;
+            }
+
+            //var sourceColors = new Color[Animation.Texture.Width * Animation.Texture.Height];
+            //Animation.Texture.GetData(sourceColors);
+
+            //var targetColors = new Color[sprite.Animation.Texture.Width * sprite.Animation.Texture.Height];
+            //sprite.Animation.Texture.GetData(targetColors);
+
+            //var left = Math.Max(Rectangle.Left, sprite.Rectangle.Left);
+            //var top = Math.Max(Rectangle.Top, sprite.Rectangle.Top);
+            //var width = Math.Min(Rectangle.Right, sprite.Rectangle.Right) - left;
+            //var height = Math.Min(Rectangle.Bottom, sprite.Rectangle.Bottom) - top;
+
+            //var intersectingRectangle = new Rectangle(left, top, width, height);
+
+            //Rectangle rect1 = Rectangle;
+            //Rectangle rect2 = sprite.Rectangle;
+            //_ = new Rectangle();
+            //Rectangle.Intersect(ref rect1, ref rect2, out Rectangle intersectingRectangle);
+
+            //----------------------------------------------------------------------------------------------
+            //for (var x = intersectingRectangle.Left; x < intersectingRectangle.Right; x++)
+            //{
+            //    for (var y = intersectingRectangle.Top; y < intersectingRectangle.Bottom; y++)
+            //    {
+            //        pixelsCalculated++;
+
+            //        var sourceColor = sourceColors[(x - Rectangle.Left) + (y - Rectangle.Top) * Animation.Texture.Width];
+            //        var targetColor = targetColors[(x - sprite.Rectangle.Left) + (y - sprite.Rectangle.Top) * sprite.Animation.Texture.Width];
+
+            //        if (sourceColor.A != 0 && targetColor.A != 0)
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+            //return false;
+
             // Calculate a matrix which transforms from A's local space into
             // world space and then into B's local space
             var transformAToB = this.Transform * Matrix.Invert(sprite.Transform);
@@ -146,6 +213,8 @@ namespace SpaceShooter.Sprites
 
                 for (int xA = 0; xA < this.Rectangle.Width; xA++)
                 {
+                    pixelsCalculated++;
+
                     // Round to the nearest pixel
                     var xB = (int)Math.Round(posInB.X);
                     var yB = (int)Math.Round(posInB.Y);
@@ -161,7 +230,6 @@ namespace SpaceShooter.Sprites
                         if (colourA.A != 0 && colourB.A != 0)
                         {
                             return true;
-
                         }
                     }
 
@@ -173,7 +241,7 @@ namespace SpaceShooter.Sprites
                 yPosInB += stepY;
             }
 
-            // No intersection found
+            // No intersection found            
             return false;
         }
     }
