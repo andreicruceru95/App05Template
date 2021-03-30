@@ -127,10 +127,10 @@ namespace SpaceShooter.Manager
             {
                 Position = new Vector2(Camera.SCREEN_WIDTH, 400),
                 LifeSpan = int.MaxValue,
-                LinearVelocity = 1f,
+                LinearVelocity = 0.5f,
                 IsRemoved = false,
                 IsControlable = false,
-                Projectile = new Projectile(TextureManager.Instance.GetTexture("bullet1"), 1, 10)
+                Projectile = new Projectile(TextureManager.Instance.GetTexture("bullet3"), 1, 30)
             };
             ship.SetAnimation(TextureManager.Instance.GetTexture("green ship"));
             ship.Initialize();

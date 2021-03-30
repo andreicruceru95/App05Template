@@ -17,7 +17,7 @@ namespace SpaceShooter.Sprites
             RotationVelocity = 2f;
             Scale = 1.5f;
 
-            Animation.TimeBetweenFrames = 1f;
+            Animation.TimeBetweenFrames = 0.5f;
             Animation.IsPlaying = true;
         }
 

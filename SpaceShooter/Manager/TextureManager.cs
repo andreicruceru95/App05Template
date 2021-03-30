@@ -117,4 +117,3 @@ namespace SpaceShooter.Manager
         }
     }
 }
-ww
