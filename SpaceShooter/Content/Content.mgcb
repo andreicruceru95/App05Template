@@ -20,6 +20,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Ariel.spritefont
 
+#begin Backgrounds/background-menu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Backgrounds/background-menu.png
+
 #begin Backgrounds/bg0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -704,6 +716,30 @@
 /processorParam:TextureFormat=Color
 /build:Images/GUI/Music.png
 
+#begin Images/GUI/new game.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/GUI/new game.png
+
+#begin Images/GUI/options.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/GUI/options.png
+
 #begin Images/GUI/Pause.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -740,6 +776,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/GUI/Points.png
 
+#begin Images/GUI/quit.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/GUI/quit.png
+
 #begin Images/GUI/Reload.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -751,6 +799,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/GUI/Reload.png
+
+#begin Images/GUI/score.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/GUI/score.png
 
 #begin Images/Projectiles/bullet1.png
 /importer:TextureImporter
