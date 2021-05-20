@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpaceShooter.Menu
+namespace SpaceShooter.Screens
 {
     public abstract class Screen
     {

@@ -7,13 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpaceShooter.Menu
+namespace SpaceShooter.Screens
 {
     public class MenuScreen : Screen
     {
         private List<Button> buttons;
         private Texture2D background;
-        private Vector2 possition = new Vector2(Camera.SCREEN_WIDTH/2, Camera.SCREEN_HEIGHT/2);
+        private Vector2 possition = new Vector2(Camera.SCREEN_WIDTH/2 + 350, Camera.SCREEN_HEIGHT/2 - 200);
         
         public MenuScreen(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) 
             : base(game,graphicsDevice,content)
@@ -22,52 +22,45 @@ namespace SpaceShooter.Menu
             var newGameTexture = TextureManager.Instance.GetTexture("new game").Texture;
 
             var newGameButton = new Button(newGameTexture,
-                Color.White);
+                Color.Red);
             newGameButton.Click += NewGameButton_Click;
-            newGameButton.Position = possition;
+            newGameButton.Position = possition ;                       
 
-            var optionsButton = new Button(TextureManager.Instance.GetTexture("options").Texture,
-                Color.White);
-            optionsButton.Click += OptionsButton_Click;
-            optionsButton.Position = possition + new Vector2(0, 40);
+            var credits = new Button(TextureManager.Instance.GetTexture("score").Texture,
+                Color.Red);
+            credits.Click += CreditsButton_Click;
+            credits.Position = possition + new Vector2(0, 100);
 
             var quitButton = new Button(TextureManager.Instance.GetTexture("quit").Texture,
-                Color.White);
+                Color.Red);
             quitButton.Click += QuitButton_Click;
-            quitButton.Position = possition + new Vector2(0, 80);
-
-            var scoreButton = new Button(TextureManager.Instance.GetTexture("score").Texture,
-                Color.White);
-            scoreButton.Click += ScoreButton_Click;
-            scoreButton.Position = possition + new Vector2(0, 120);
+            quitButton.Position = possition + new Vector2(0, 200);
 
             buttons = new List<Button>()
             {
-                newGameButton,
-                optionsButton,
-                quitButton,
-                scoreButton
+                newGameButton,               
+                credits,
+                quitButton
             };
+            foreach (Button btn in buttons)
+                btn.Width = 200;
         }
 
 #region Buttons
-        private void ScoreButton_Click(object sender, EventArgs e)
+        private void CreditsButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            _game.ChangeScreen(new CreditsScreen(_game, _graphicsDevice, _content));
         }
 
         private void QuitButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            _game.Exit();            
         }
-
-        private void OptionsButton_Click(object sender, EventArgs e)
-        {
-            _game.Exit();
-        }        
+               
         private void NewGameButton_Click(object sender, EventArgs e)
         {
-            _game.ChangeScreen(new GameScreen(_game, _graphicsDevice, _content));
+            _game.ChangeScreen(new GameIntro(_game, _graphicsDevice, _content));
+            //_game.ChangeScreen(new GameScreen(_game, _graphicsDevice, _content));
         }
         #endregion
 

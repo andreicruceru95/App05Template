@@ -20,6 +20,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Ariel.spritefont
 
+#begin Backgrounds/background-credits.webp
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Backgrounds/background-credits.webp
+
 #begin Backgrounds/background-menu.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -727,6 +739,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/GUI/new game.png
+
+#begin Images/GUI/ok.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/GUI/ok.png
 
 #begin Images/GUI/options.png
 /importer:TextureImporter

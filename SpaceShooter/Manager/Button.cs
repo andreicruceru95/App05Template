@@ -33,12 +33,14 @@ namespace SpaceShooter.Sprites
         public Color PenColour { get; set; }
 
         public Vector2 Position { get; set; }
+        public int Width { get; set;} = 50;
+        public int Height { get; set; } = 50;
 
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, 50, 50);
+                return new Rectangle((int)Position.X, (int)Position.Y, Width, Height) ;
             }
         }
 
@@ -53,6 +55,7 @@ namespace SpaceShooter.Sprites
         {
             Texture = texture;
             this.InitialColour = initialColour;
+            _font = FontManager.Instance.Arial;
 
             PenColour = Color.Black;
         }

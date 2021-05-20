@@ -10,7 +10,7 @@ namespace SpaceShooter.Manager
     {
         private static Camera instance;
         public const int SCREEN_HEIGHT = 720;
-        public const int SCREEN_WIDTH = 1280;
+        public const int SCREEN_WIDTH = 1400;
         public Matrix Transform { get; protected set; }
 
         /// <summary>

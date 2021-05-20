@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpaceShooter.Menu
+namespace SpaceShooter.Screens
+
 {
     public enum GameStates
     {
@@ -18,7 +19,7 @@ namespace SpaceShooter.Menu
     {
 
         #region Fields
-
+        private string playerName;
         private Texture2D healthTexture;
 
         private Vector2 healthPosition;
@@ -28,20 +29,24 @@ namespace SpaceShooter.Menu
         private string gameOver = "Game Over! Do you want to retry?";
         private bool IsOver;
         private GameStates gameState;
+        private ScoreManager scoreManager;
 
         private List<Component> components;
 
         #endregion
 
-        public GameScreen(Game1 game,GraphicsDevice graphics, ContentManager content) 
+        public GameScreen(Game1 game,GraphicsDevice graphics, ContentManager content, string playerName) 
             :base(game, graphics,content)
         {
             gameState = GameStates.Play;
+            this.playerName = playerName;
         }
 
         #region Initialize
         public override void LoadContent()
         {
+            scoreManager = ScoreManager.Load();
+
             healthPosition = new Vector2(100, Camera.SCREEN_HEIGHT - 100);
             healthTexture = TextureManager.Instance.GetTexture("Health").Texture;
             healthIconRectangle = new Rectangle((int)healthPosition.X, (int)healthPosition.Y, 50, 50);
@@ -87,7 +92,7 @@ namespace SpaceShooter.Menu
 
         private void Points_Click(object sender, System.EventArgs e)
         {
-            throw new System.NotImplementedException();
+            _game.ChangeScreen(new ScoreScreen(_game, _graphicsDevice, _content, this));
         }
 
         private void Reload_Click(object sender, System.EventArgs e)
@@ -116,6 +121,14 @@ namespace SpaceShooter.Menu
         }
         private void Exit_Click(object sender, System.EventArgs e)
         {
+            var score = new Score();
+
+            score.PlayerName = playerName;
+            score.Value = SpriteManager.Instance.Player.Score;
+            scoreManager.Add(score);
+
+            ScoreManager.Save(scoreManager);
+
             _game.Exit();
         }
         private void Pause_Click(object sender, System.EventArgs e)
@@ -191,7 +204,8 @@ namespace SpaceShooter.Menu
             projectile.Draw(gameTime, spriteBatch);
             spriteBatch.DrawString(FontManager.Instance.Arial, $"{SpriteManager.Instance.Player.Ammo}",
                 new Vector2(2 * projectile.Rectangle.Width, projectile.Rectangle.Height / 2), Color.White);
-
+            spriteBatch.DrawString(FontManager.Instance.Arial, $"Player: {playerName}",
+                new Vector2(200, 20), Color.White);
             // draw health icon, rectangle and health amount.
             spriteBatch.Draw(healthTexture, healthIconRectangle, Color.MistyRose);
             spriteBatch.Draw(TextureManager.Instance.GetTexture("healthTexture").Texture, healthRectangle, Color.White);

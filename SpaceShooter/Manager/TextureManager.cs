@@ -44,6 +44,7 @@ namespace SpaceShooter.Manager
             atlases.Add("stone50", new Animation(content.Load<Texture2D>("Images/Asteroids/stone50"), 1, 1));
             atlases.Add("stone30", new Animation(content.Load<Texture2D>("Images/Asteroids/stone30"), 1, 1));
             atlases.Add("background-menu", new Animation(content.Load<Texture2D>("Backgrounds/background-menu"), 1, 1));
+            atlases.Add("background-credits", new Animation(content.Load<Texture2D>("Backgrounds/background-credits"), 1, 1));
 
             LoadGUI();
             LoadCoins();
@@ -77,6 +78,7 @@ namespace SpaceShooter.Manager
             atlases.Add("options", new Animation(content.Load<Texture2D>("Images/GUI/options"), 1, 1));
             atlases.Add("quit", new Animation(content.Load<Texture2D>("Images/GUI/quit"), 1, 1));
             atlases.Add("score", new Animation(content.Load<Texture2D>("Images/GUI/score"), 1, 1));
+            atlases.Add("ok", new Animation(content.Load<Texture2D>("Images/GUI/ok"), 1, 1));
         }
 
         private void LoadCoins()

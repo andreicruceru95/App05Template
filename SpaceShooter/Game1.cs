@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using SpaceShooter.Manager;
-using SpaceShooter.Menu;
-using SpaceShooter.Sprites;
-using System.Collections.Generic;
+using SpaceShooter.Screens;
 
 namespace SpaceShooter
 {
