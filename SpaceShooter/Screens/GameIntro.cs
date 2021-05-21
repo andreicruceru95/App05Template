@@ -98,7 +98,8 @@ namespace SpaceShooter.Screens
             lastPressedKeys = pressedKeys;
 
             okButton.Update(gameTime);
-            playButton.Update(gameTime);
+            if(nameOK)
+                playButton.Update(gameTime);
         }
         /// <summary>
         /// Draw text on screen.

@@ -17,17 +17,19 @@ namespace SpaceShooter.Screens
         public string Text;
         public Vector2 Origin;
         public bool IsRemoved = false;
+        public int orderLevel;
 
         private Vector2 direction;
         private Vector2 position;
         private SpriteFont font;
-        public CreditText(string text, int order)
+        
+        public CreditText(string text)
         {            
             font = FontManager.Instance.Arial;
             var originX = Camera.SCREEN_WIDTH/2 - font.MeasureString(text).X/2;
-
             Text = text;
-            Origin = position = new Vector2((float)originX, Camera.SCREEN_HEIGHT + order * 50 + font.MeasureString(text).Y);
+
+            Origin = new Vector2((float)originX, Camera.SCREEN_HEIGHT + orderLevel * 50 + font.MeasureString(text).Y);
             direction = new Vector2(0, -1);
         }
         /// <summary>
@@ -37,7 +39,7 @@ namespace SpaceShooter.Screens
         public void Update(GameTime gameTime)
         {
             if (!IsRemoved)
-                position += new Vector2(0, -1);
+                position += direction;
 
             if(position.Y < - font.MeasureString(Text).Y)
             {
@@ -45,6 +47,14 @@ namespace SpaceShooter.Screens
                 IsRemoved = true;
             }
         }
+
+        public void UpdatePosition()
+        {
+            var originX = Camera.SCREEN_WIDTH / 2 - font.MeasureString(Text).X / 2;
+
+            position = new Vector2((float)originX, Camera.SCREEN_HEIGHT + orderLevel * 50 + font.MeasureString(Text).Y);
+        }
+
         /// <summary>
         /// Draw text
         /// </summary>
@@ -69,24 +79,30 @@ namespace SpaceShooter.Screens
             
             credits = new List<CreditText>()
             {
-                new CreditText("CO453 Module App05 - Space Shooter",0),
-                new CreditText("by Andrei Cruceru",1),
-                new CreditText(" ",2),
-                new CreditText("Music by Eric Matyas",3),
-                new CreditText("www.soundimage.org",4),
-                new CreditText(" ",5),
-                new CreditText("Sound Effects Unknown Artist",6),
-                new CreditText("www.gamesupply.itch.io/",7),
-                new CreditText(" ",8),
-                new CreditText("Images and 2D Assets by Unknown Artist",9),
-                new CreditText("www.gamesupply.itch.io/",10),
-                new CreditText(" ",11),
-                new CreditText("Special Thanks to my lecturers",12),
-                new CreditText("Derek Peacock &",13),
-                new CreditText("Nicholas Day",14),
-                new CreditText(" ",15),
-                new CreditText("Thank you for playing!",16)
+                new CreditText("CO453 Module App05 - Space Shooter"),
+                new CreditText("by Andrei Cruceru"),
+                new CreditText(" "),
+                new CreditText("Music by Eric Matyas"),
+                new CreditText("www.soundimage.org"),
+                new CreditText(" "),
+                new CreditText("Sound Effects Unknown Artist"),
+                new CreditText("www.gamesupply.itch.io/"),
+                new CreditText(" "),
+                new CreditText("Images and 2D Assets by Unknown Artist"),
+                new CreditText("www.gamesupply.itch.io/"),
+                new CreditText(" "),
+                new CreditText("Special Thanks to my lecturers"),
+                new CreditText("Derek Peacock &"),
+                new CreditText("Nicholas Day"),
+                new CreditText(" "),
+                new CreditText("Thank you for playing!")
             };
+
+            for (int i = 0; i < credits.Count; i++)
+            {
+                credits[i].orderLevel = i;
+                credits[i].UpdatePosition();
+            }
         }
         
         public override void LoadContent()
