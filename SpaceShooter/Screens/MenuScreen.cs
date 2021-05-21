@@ -5,10 +5,12 @@ using SpaceShooter.Manager;
 using SpaceShooter.Sprites;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceShooter.Screens
 {
+    /// <summary>
+    /// Menu screen is a map to other screens.
+    /// </summary>
     public class MenuScreen : Screen
     {
         private List<Button> buttons;
@@ -65,10 +67,11 @@ namespace SpaceShooter.Screens
         #endregion
 
         public override void LoadContent()
-        {
-            
-        }       
-
+        { }       
+        /// <summary>
+        /// Update screen components.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             foreach(var button in buttons)
@@ -77,9 +80,12 @@ namespace SpaceShooter.Screens
             }
         }
         public override void PostUpdate(GameTime gameTime)
-        {
-            
-        }
+        { }
+        /// <summary>
+        /// Draw components on screen.
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="spritebatch"></param>
         public override void Draw(GameTime gametime, SpriteBatch spritebatch)
         {
             spritebatch.Begin();

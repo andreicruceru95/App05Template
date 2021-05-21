@@ -8,6 +8,9 @@ using System.Text;
 
 namespace SpaceShooter.Sprites
 {
+    /// <summary>
+    /// Button is used to take player input and respond to it by performing an action.
+    /// </summary>
     public class Button : Component
     {
         #region Fields
@@ -35,6 +38,7 @@ namespace SpaceShooter.Sprites
         public Vector2 Position { get; set; }
         public int Width { get; set;} = 50;
         public int Height { get; set; } = 50;
+        public Texture2D Texture { get; set; }
 
         public Rectangle Rectangle
         {
@@ -49,8 +53,7 @@ namespace SpaceShooter.Sprites
         #endregion
 
         #region Methods
-
-        public Texture2D Texture { get; set; }
+        
         public Button(Texture2D texture, Color initialColour)
         {
             Texture = texture;
@@ -59,7 +62,11 @@ namespace SpaceShooter.Sprites
 
             PenColour = Color.Black;
         }
-
+        /// <summary>
+        /// Draw button on screen
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var colour = InitialColour;
@@ -77,7 +84,10 @@ namespace SpaceShooter.Sprites
                 spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColour);
             }
         }
-
+        /// <summary>
+        /// Update button
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             _previousMouse = _currentMouse;

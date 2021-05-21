@@ -7,6 +7,9 @@ using System.Text;
 
 namespace SpaceShooter.Screens
 {
+    /// <summary>
+    /// Screen class sets the rules for creating a screen.
+    /// </summary>
     public abstract class Screen
     {
         protected Game1 _game;

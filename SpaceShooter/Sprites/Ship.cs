@@ -258,19 +258,17 @@ namespace SpaceShooter.Sprites
                 sprite.CurrentHealth -= CurrentHealth / 2;
                 return;
             }
-            if (sprite is Asteroid && (sprite != SpriteManager.Instance.Player))
+            if (sprite is Asteroid && (this == SpriteManager.Instance.Player))
             {
-                //LinearVelocity = 0;
-
-                //if (Position.X >= sprite.Position.X) Position.X++;
-                //else Position.X--;
-                //if (Position.Y >= sprite.Position.Y) Position.Y++;
-                //else Position.Y--;
-
-                //LinearVelocity = 4;
+                CurrentHealth -= sprite.Damage;
 
                 return;
             }
+            if (sprite is Asteroid && (this != SpriteManager.Instance.Player))
+            {
+                return;
+            }
+            
             base.OnColide(sprite);
 
             if (CurrentHealth < 0 || IsRemoved) SoundManager.Instance.PlayEffect("flame");

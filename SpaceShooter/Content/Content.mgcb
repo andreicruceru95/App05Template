@@ -20,7 +20,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Ariel.spritefont
 
-#begin Backgrounds/background-credits.webp
+#begin Backgrounds/background-credits.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -30,7 +30,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Backgrounds/background-credits.webp
+/build:Backgrounds/background-credits.jpg
 
 #begin Backgrounds/background-menu.png
 /importer:TextureImporter

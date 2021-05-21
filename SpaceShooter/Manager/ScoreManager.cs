@@ -7,6 +7,9 @@ using System.Xml.Serialization;
 
 namespace SpaceShooter.Manager
 {
+    /// <summary>
+    /// Score manager manages the players score and saves/loads the files.
+    /// </summary>
     public class ScoreManager
     {
         private static string _fileName = "scores.xml"; // Since we don't give a path, this'll be saved in the "bin" folder
@@ -26,7 +29,10 @@ namespace SpaceShooter.Manager
 
             UpdateHighscores();
         }
-
+        /// <summary>
+        /// Add and save a score.
+        /// </summary>
+        /// <param name="score"></param>
         public void Add(Score score)
         {
             Scores.Add(score);
@@ -35,7 +41,10 @@ namespace SpaceShooter.Manager
 
             UpdateHighscores();
         }
-
+        /// <summary>
+        /// Load score files if exists or create new one.
+        /// </summary>
+        /// <returns></returns>
         public static ScoreManager Load()
         {
             // If there isn't a file to load - create a new instance of "ScoreManager"
@@ -53,12 +62,17 @@ namespace SpaceShooter.Manager
                 return new ScoreManager(scores);
             }
         }
-
+        /// <summary>
+        /// update highscores list.
+        /// </summary>
         public void UpdateHighscores()
         {
             Highscores = Scores.Take(5).ToList(); // Takes the first 5 elements
         }
-
+        /// <summary>
+        /// Save scores to xml file.
+        /// </summary>
+        /// <param name="scoreManager"></param>
         public static void Save(ScoreManager scoreManager)
         {
             // Overrides the file if it already exists

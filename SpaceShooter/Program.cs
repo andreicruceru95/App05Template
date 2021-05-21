@@ -2,6 +2,9 @@
 
 namespace SpaceShooter
 {
+    /// <summary>
+    /// Program contains the main method that starts the game.
+    /// </summary>
     public static class Program
     {
         [STAThread]

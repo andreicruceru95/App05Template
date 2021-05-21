@@ -10,11 +10,14 @@ using System.Linq;
 
 namespace SpaceShooter.Screens
 {
+    /// <summary>
+    /// Screen required to display game introduction and input player name.
+    /// </summary>
     public class GameIntro : Screen
     {
         private string playerName;
         private string question = "Please enter player Name: ";
-        private string acceptedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private string acceptedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private bool nameOK = false;
 
         private List<Keys> lastPressedKeys;
@@ -56,7 +59,7 @@ namespace SpaceShooter.Screens
             playButton.Width = 150;
             playButton.Click += PlayButton_Click;
         }
-
+        
         private void PlayButton_Click(object sender, EventArgs e)
         {
             _game.ChangeScreen(new GameScreen(_game, _graphicsDevice, _content, playerName));
@@ -69,15 +72,14 @@ namespace SpaceShooter.Screens
         }
 
         public override void LoadContent()
-        {
-            
-        }
+        { }
 
         public override void PostUpdate(GameTime gameTime)
-        {
-            
-        }
-
+        { }
+        /// <summary>
+        /// Update player input.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             okButton.Position = new Vector2(namePosition.X +100+ font.MeasureString(playerName).X, Camera.SCREEN_HEIGHT - 100);
@@ -98,6 +100,11 @@ namespace SpaceShooter.Screens
             okButton.Update(gameTime);
             playButton.Update(gameTime);
         }
+        /// <summary>
+        /// Draw text on screen.
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="spritebatch"></param>
         public override void Draw(GameTime gametime, SpriteBatch spritebatch)
         {
             int x = 50;
@@ -125,6 +132,10 @@ namespace SpaceShooter.Screens
 
             spritebatch.End();
         }
+        /// <summary>
+        /// Add characters to player name.
+        /// </summary>
+        /// <param name="key"></param>
         private void OnKeyDown(Keys key)
         {
             if(acceptedCharacters.Contains(key.ToString()) && playerName.Length <= 8)

@@ -10,6 +10,9 @@ using System.Text;
 
 namespace SpaceShooter.Screens
 {
+    /// <summary>
+    /// Score screen will display the player highscores on screen.
+    /// </summary>
     public class ScoreScreen : Screen
     {
         private GameScreen gameScreen;
@@ -36,7 +39,11 @@ namespace SpaceShooter.Screens
         {
             _game.ChangeScreen(gameScreen);
         }
-
+        /// <summary>
+        /// Draw scores on screen
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="spritebatch"></param>
         public override void Draw(GameTime gametime, SpriteBatch spritebatch)
         {
             spritebatch.Begin();
@@ -53,15 +60,14 @@ namespace SpaceShooter.Screens
         }
 
         public override void LoadContent()
-        {
-            
-        }
+        {  }
 
         public override void PostUpdate(GameTime gameTime)
-        {
-            
-        }
-
+        {  }
+        /// <summary>
+        /// Update buttons.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             backButton.Update(gameTime);

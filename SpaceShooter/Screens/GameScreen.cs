@@ -11,10 +11,17 @@ using System.Text;
 namespace SpaceShooter.Screens
 
 {
+   /// <summary>
+   /// 
+   /// States of the game.
+   /// </summary>
     public enum GameStates
     {
         Play, Pause
     }
+    /// <summary>
+    /// Game screen is required to play the game.
+    /// </summary>
     public class GameScreen : Screen
     {
 
@@ -27,7 +34,9 @@ namespace SpaceShooter.Screens
         private Rectangle healthRectangle, healthIconRectangle;
 
         private string gameOver = "Game Over! Do you want to retry?";
-        private bool IsOver;
+        private string gameWon;
+        private bool isOver;
+        private bool hasWon;
         private GameStates gameState;
         private ScoreManager scoreManager;
 
@@ -40,9 +49,13 @@ namespace SpaceShooter.Screens
         {
             gameState = GameStates.Play;
             this.playerName = playerName;
+            gameWon = $"You Won!!Congratz {playerName}";
         }
 
         #region Initialize
+        /// <summary>
+        /// Load any content.
+        /// </summary>
         public override void LoadContent()
         {
             scoreManager = ScoreManager.Load();
@@ -53,6 +66,9 @@ namespace SpaceShooter.Screens
 
             AssignEvents();
         }
+        /// <summary>
+        /// Create buttons and assign events.
+        /// </summary>
         private void AssignEvents()
         {
             var exit = new Button(TextureManager.Instance.GetTexture("Exit").Texture, Color.Red);
@@ -97,10 +113,10 @@ namespace SpaceShooter.Screens
 
         private void Reload_Click(object sender, System.EventArgs e)
         {
-            if (IsOver)
+            if (isOver)
             {
                 SpriteManager.Instance.AddPlayer();
-                IsOver = false;
+                isOver = false;
             }
         }
         private void Music_Click(object sender, System.EventArgs e)
@@ -149,25 +165,35 @@ namespace SpaceShooter.Screens
             }
         }
         #endregion
-
+        /// <summary>
+        /// Update screen objects based on the game state.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            if (gameState == GameStates.Play && !IsOver)
+            if (gameState == GameStates.Play && !isOver)
             {
                 healthRectangle = new Rectangle((int)healthPosition.X + healthIconRectangle.Width, (int)healthPosition.Y,
                     SpriteManager.Instance.Player.CurrentHealth, healthIconRectangle.Height);
                 projectile.Texture = SpriteManager.Instance.Player.Projectile.Animation.Texture;
 
-                if (SpriteManager.Instance.Player.CurrentHealth <= 0)
+                if (SpriteManager.Instance.Player.CurrentHealth <= 0 )
                 {
-                    IsOver = true;
+                    isOver = true;
                     MediaPlayer.IsMuted = true;
                     SoundManager.Instance.PlayEffect("gameover");
                 }
                 else
                 {
-                    IsOver = false;
+                    isOver = false;
                 }
+                if(SpriteManager.Instance.HasWon)
+                {
+                    MediaPlayer.IsMuted = true;
+                    hasWon = true;
+                    SoundManager.Instance.PlayEffect("gameover");
+                }
+
 
                 SpriteManager.Instance.Update(gameTime);
                 Camera.Instance.Update(SpriteManager.Instance.Player);
@@ -182,9 +208,12 @@ namespace SpaceShooter.Screens
 
         }
         public override void PostUpdate(GameTime gameTime)
-        {
-            
-        }
+        { }
+        /// <summary>
+        /// Draw game components.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             string playerHealth = $"{SpriteManager.Instance.Player.CurrentHealth} / {SpriteManager.Instance.Player.MaxHealth}";
@@ -218,10 +247,17 @@ namespace SpaceShooter.Screens
             spriteBatch.DrawString(FontManager.Instance.TimesNewRoman, $"Author : Andrei Cruceru",
                 new Vector2(10, Camera.SCREEN_HEIGHT - 20), Color.White);
 
-            if (IsOver)
+            if (isOver)
             {
                 spriteBatch.DrawString(FontManager.Instance.Arial, gameOver, new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(gameOver).X / 2,
                     Camera.SCREEN_HEIGHT / 2 - FontManager.Instance.Arial.MeasureString(gameOver).Y), Color.White);
+
+                reload.Draw(gameTime, spriteBatch);
+            }
+            if (hasWon)
+            {
+                spriteBatch.DrawString(FontManager.Instance.Arial, gameOver, new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(gameWon).X / 2,
+                    Camera.SCREEN_HEIGHT / 2 - FontManager.Instance.Arial.MeasureString(gameWon).Y), Color.White);
 
                 reload.Draw(gameTime, spriteBatch);
             }

@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using SpaceShooter.Manager;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceShooter.Sprites
 {
+    /// <summary>
+    /// Asteroid is an colidable object that can take damage and damage other objects.
+    /// </summary>
     public class Asteroid : Sprite
     {
         private float timer = 0;
@@ -32,6 +33,10 @@ namespace SpaceShooter.Sprites
 
             base.Initialize();
         }
+        /// <summary>
+        /// Update object.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -51,14 +56,21 @@ namespace SpaceShooter.Sprites
 
             base.Update(gameTime);
         }
-
+        /// <summary>
+        /// Draw object.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
 
             spriteBatch.Draw(healthTexture, healthRectangle, Color.White);
         }
-
+        /// <summary>
+        /// Set collision rules.
+        /// </summary>
+        /// <param name="sprite"></param>
         public override void OnColide(Sprite sprite) 
         {
             base.OnColide(sprite);
@@ -76,6 +88,11 @@ namespace SpaceShooter.Sprites
 
             if(IsRemoved || CurrentHealth <= 0) SoundManager.Instance.PlayEffect("flame");
         }
+        /// <summary>
+        /// Check intersection.
+        /// </summary>
+        /// <param name="sprite"></param>
+        /// <returns></returns>
         public override bool Intersects(Sprite sprite)
         {
             if (sprite.Parent == SpriteManager.Instance.Player || sprite == SpriteManager.Instance.Player) 

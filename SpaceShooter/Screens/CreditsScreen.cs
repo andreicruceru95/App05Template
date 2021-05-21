@@ -9,6 +9,9 @@ using System.Text;
 
 namespace SpaceShooter.Screens
 {
+    /// <summary>
+    /// Dynamic text used to display credits..
+    /// </summary>
     internal class CreditText
     {
         public string Text;
@@ -27,6 +30,10 @@ namespace SpaceShooter.Screens
             Origin = position = new Vector2((float)originX, Camera.SCREEN_HEIGHT + order * 50 + font.MeasureString(text).Y);
             direction = new Vector2(0, -1);
         }
+        /// <summary>
+        /// Update text.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
             if (!IsRemoved)
@@ -38,12 +45,19 @@ namespace SpaceShooter.Screens
                 IsRemoved = true;
             }
         }
+        /// <summary>
+        /// Draw text
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             if(!IsRemoved)
                 spriteBatch.DrawString(font, Text, position, Color.White);
         }
     }
+    /// <summary>
+    /// This screen is required to display the text credits.
+    /// </summary>
     public class CreditsScreen : Screen
     {
         private Texture2D background;
@@ -80,7 +94,10 @@ namespace SpaceShooter.Screens
 
         public override void PostUpdate(GameTime gameTime)
         {}
-
+        /// <summary>
+        /// Update screen;
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             var left = 0;
@@ -96,6 +113,11 @@ namespace SpaceShooter.Screens
             if (keys.Length > 0 || left == 0)
                 _game.ChangeScreen(new MenuScreen(_game, _graphicsDevice, _content));
         }
+        /// <summary>
+        /// Draw text on screen
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="spriteBatch"></param>
         public override void Draw(GameTime gametime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();

@@ -8,6 +8,10 @@ using System.Text;
 
 namespace SpaceShooter.Manager
 {
+    /// <summary>
+    /// A way to get player input from keyboard or mouse.
+    /// Replaces the traditional keyboard check with event listeners.
+    /// </summary>
     public class KeyListener : Component
     {
         #region Fields
@@ -25,6 +29,10 @@ namespace SpaceShooter.Manager
             this.canRepeat = canRepeat;
         }
         #region Methods
+        /// <summary>
+        /// Update keys
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             previousKey = currentKey;
@@ -42,6 +50,11 @@ namespace SpaceShooter.Manager
                 Pressed?.Invoke(this, new EventArgs());                
             }
         }
+        /// <summary>
+        /// Draw keys
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             throw new NotImplementedException();

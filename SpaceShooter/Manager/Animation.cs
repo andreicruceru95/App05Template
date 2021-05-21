@@ -9,23 +9,6 @@ namespace SpaceShooter.Manager
     /// </summary>
     public class Animation
     {
-        //public int CurrentFrame { get; set; }
-        //public int FrameCount { get; set; }
-        //public float FrameSpeed { get; set; }
-        //public int Rows { get; set; }
-        //public int Columns { get; set; }
-        //public bool IsLoping { get; set; }
-        //public Texture2D Image { get; set; }
-
-        //public Animation(Texture2D image, int rows, int col)
-        //{
-        //    Image = image;
-        //    Rows = rows;
-        //    Columns = col;
-        //    FrameCount = rows * col;
-        //    IsLoping = true;
-        //    FrameSpeed = 0.2f;
-        //}
 
         public Texture2D Texture;
         public int Rows { get; set; }
@@ -64,7 +47,7 @@ namespace SpaceShooter.Manager
         }
 
         /// <summary>
-        /// Update frames
+        /// Update animation.
         /// </summary>
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
@@ -85,7 +68,9 @@ namespace SpaceShooter.Manager
 
             UpdateFrame();
         }
-
+        /// <summary>
+        /// Update animation frame.
+        /// </summary>
         private void UpdateFrame()
         {
             int width = Texture.Width / Columns;

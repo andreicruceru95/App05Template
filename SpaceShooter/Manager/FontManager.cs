@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SpaceShooter.Manager
 {
+    /// <summary>
+    /// Font manager stores information about the font types across the game.
+    /// </summary>
     public class FontManager
     {
         private static FontManager instance;

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Media;
 using SpaceShooter.Sprites;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceShooter.Manager
 {
@@ -14,24 +13,29 @@ namespace SpaceShooter.Manager
     /// </summary>
     public class SpriteManager
     {
+        #region Fields
         private static SpriteManager instance;
+
         private int PointsToUpgrade = 2000;
         private int ImageIndex = 1;
         private bool IsUpgraded;
         private float messageTimer = 0;
         private float messagePositionY;
-        private float maxTime = 3;
-        public GraphicsDevice Graphics { get; private set; }
+        private float asteroidSpawntime = 3;
+        private float shipSpawnTime = 5;
+        private float AsteroidTimer = 0;
+        private float shipTimer = 0;
+        
+        #endregion
 
         #region Properties
+        public GraphicsDevice Graphics { get; private set; }
         public Ship Player { get; private set; }
         public List<Sprite> Sprites { get; private set; }
         public Scrolling Scrolling1 { get; set; }
         public Scrolling Scrolling2 { get; set; }
-
         public Random rand;
-        public float timer = 0;
-
+        public bool HasWon { get; set; }
         public static SpriteManager Instance
         {
             get
@@ -52,7 +56,7 @@ namespace SpaceShooter.Manager
         public void Initialize(GraphicsDevice graphics)
         {
             this.Graphics = graphics;
-            
+
             rand = new Random();
             messagePositionY = Camera.SCREEN_HEIGHT / 2;
 
@@ -69,11 +73,11 @@ namespace SpaceShooter.Manager
 
             AddPlayer();
             SpawnAsteroid();
-        }        
+        }
         private void AddCoins(Vector2 position)
         {
             int coinNumber = rand.Next(1, 3);
-            if(position.X >= 0 && position.Y >= 0 && position.X < Camera.SCREEN_WIDTH && position.Y < Camera.SCREEN_HEIGHT)
+            if (position.X >= 0 && position.Y >= 0 && position.X < Camera.SCREEN_WIDTH && position.Y < Camera.SCREEN_HEIGHT)
                 Sprites.Add(new Coin(TextureManager.Instance.GetTexture("coin" + coinNumber), position, 1, coinNumber * 100));
         }
         private void AddAmmo(Asteroid asteroid)
@@ -101,9 +105,9 @@ namespace SpaceShooter.Manager
         /// </summary>
         private void SpawnAsteroid()
         {
-            int asteroidNumber = rand.Next(1, TextureManager.Instance.MaxAsteroids -1);
+            int asteroidNumber = rand.Next(1, TextureManager.Instance.MaxAsteroids - 1);
 
-            Sprites.Add(new Asteroid(TextureManager.Instance.GetTexture("Asteroid" + asteroidNumber), 200,50));
+            Sprites.Add(new Asteroid(TextureManager.Instance.GetTexture("Asteroid" + asteroidNumber), 200, 50));
         }
         /// <summary>
         /// Initialize player object.
@@ -121,24 +125,45 @@ namespace SpaceShooter.Manager
                 Ammo = 100,
                 AmmoToIncrease = 15,
                 IsControlable = true,
-                IsRemoved = false,                
+                IsRemoved = false,
             };
-            Ship ship = new Ship(500, 50)
+
+            MediaPlayer.IsMuted = false;
+            Sprites.Add(Player);
+        }
+
+        private void SpawnShip()
+        {
+            int numberOfShipsOnScreen = 0;
+            for(int i = 0; i < Sprites.Count;i++)
+            {
+                if (Sprites[i] is Ship)
+                    numberOfShipsOnScreen++;
+
+                if (numberOfShipsOnScreen >= 3)
+                    return;
+            }
+
+            int health = rand.Next(Player.MaxHealth / 2, Player.MaxHealth);
+            int damage = 50;
+            int randomShip = rand.Next(1, TextureManager.Instance.MaxShips);
+            int randomBullet = rand.Next(1, TextureManager.Instance.MaxBullets);
+
+            Ship ship = new Ship(health, damage)
             {
                 Position = new Vector2(Camera.SCREEN_WIDTH, 400),
                 LifeSpan = int.MaxValue,
                 LinearVelocity = 0.5f,
                 IsRemoved = false,
                 IsControlable = false,
-                Projectile = new Projectile(TextureManager.Instance.GetTexture("bullet3"), 1, 30)
+                Projectile = new Projectile(TextureManager.Instance.GetTexture("bullet" + randomBullet), 1, 30)
             };
-            ship.SetAnimation(TextureManager.Instance.GetTexture("green ship"));
-            ship.Initialize();
 
-            MediaPlayer.IsMuted = false;
-            Sprites.Add(Player);
+            ship.SetAnimation(TextureManager.Instance.GetTexture("ship" + randomShip));
+            ship.Initialize();
             Sprites.Add(ship);
         }
+
         private void SpawnCoins(Asteroid asteroid)
         {
             int maxChance = 100;
@@ -193,7 +218,7 @@ namespace SpaceShooter.Manager
                 Scrolling1.Rectangle.X -= 200;
                 Scrolling2.Rectangle.X -= 200;
             }
-            
+
             Scrolling1.Update();
             Scrolling2.Update();
         }
@@ -206,7 +231,7 @@ namespace SpaceShooter.Manager
             {
                 sprite.Update(gameTime);
             }
-            
+
         }
         protected void PostUpdate(GameTime gameTime)
         {
@@ -247,7 +272,7 @@ namespace SpaceShooter.Manager
             {
                 if (Sprites[i].IsRemoved)
                 {
-                    if(Sprites[i] is Asteroid)
+                    if (Sprites[i] is Asteroid)
                     {
                         SpawnCoins(Sprites[i] as Asteroid);
 
@@ -265,20 +290,24 @@ namespace SpaceShooter.Manager
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            AsteroidTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            shipTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (timer > maxTime)
+            if (AsteroidTimer > asteroidSpawntime)
             {
                 SpawnAsteroid();
-                timer = 0;
-                maxTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                AsteroidTimer = 0;
             }
-            if (maxTime < 1f) maxTime = 0.5f;
+            if (shipTimer > shipSpawnTime)
+            {
+                SpawnShip();
+                shipTimer = 0;
+            }
 
             UpdateBackground();
             UpdateSprites(gameTime);
             PostUpdate(gameTime);
-            UpgradePlayer();                  
+            UpgradePlayer();
         }
 
         private void UpgradePlayer()
@@ -303,14 +332,15 @@ namespace SpaceShooter.Manager
                 IsUpgraded = true;
                 messageTimer = 0;
             }
+            if (Player.Animation == lastAnimation && PointsToUpgrade > 14000)
+                HasWon = true;
         }
-        #endregion
 
         /// <summary>
         /// Draw content.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(GameTime gameTime,SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             messageTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -319,15 +349,15 @@ namespace SpaceShooter.Manager
 
             foreach (var sprite in Sprites)
             {
-                sprite.Draw(gameTime, spriteBatch);                
+                sprite.Draw(gameTime, spriteBatch);
             }
 
-            if(IsUpgraded && messageTimer < 3f)
+            if (IsUpgraded && messageTimer < 3f)
             {
                 string message = "Ship Upgraded!";
-                float messagePossitionX = Camera.SCREEN_WIDTH /2 - FontManager.Instance.Arial.MeasureString(message).X/2;
+                float messagePossitionX = Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(message).X / 2;
 
-                spriteBatch.DrawString(FontManager.Instance.Arial,message, new Vector2(messagePossitionX, messagePositionY), Color.White) ;
+                spriteBatch.DrawString(FontManager.Instance.Arial, message, new Vector2(messagePossitionX, messagePositionY), Color.White);
 
                 messagePositionY--;
             }
@@ -335,28 +365,9 @@ namespace SpaceShooter.Manager
             {
                 IsUpgraded = false;
                 messagePositionY = Camera.SCREEN_HEIGHT / 2;
-            }            
+            }
         }
-        //private void SetRectangleTexture(GraphicsDevice graphics, Texture2D texture, out Texture2D destination)
-        //{
-        //    var colours = new List<Color>();
-        //    for (int i = 0; i < texture.Width; i++)
-        //    {
-        //        for (int j = 0; j < texture.Height; j++)
-        //        {
-        //            if (i == 0 || i == texture.Width -1 || j == 0 || j == texture.Height-1)
-        //            {
-        //                colours.Add(new Color(255, 255, 255, 255));
-        //            }
-        //            else
-        //            {
-        //                colours.Add(new Color(0, 0, 0, 0));
-        //            }
-        //        }
-        //    }
-
-        //    destination = new Texture2D(graphics, texture.Width, texture.Height);
-        //    destination.SetData<Color>(colours.ToArray());
-        //}
+        #endregion        
     }
 }
+
