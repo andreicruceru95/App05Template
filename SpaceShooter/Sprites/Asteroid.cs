@@ -49,10 +49,13 @@ namespace SpaceShooter.Sprites
             if (CurrentHealth <= 50)
                 Animation = TextureManager.Instance.GetTexture("stone50");
             if(CurrentHealth < 30)
-                Animation = TextureManager.Instance.GetTexture("stone30");           
+                Animation = TextureManager.Instance.GetTexture("stone30");
 
             if (Position.X + Rectangle.Width <= 0)
+            {
                 IsRemoved = true;
+                SpriteManager.Instance.SetGameSpeed((float)0.1);
+            }
 
             base.Update(gameTime);
         }

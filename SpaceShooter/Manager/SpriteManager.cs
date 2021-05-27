@@ -35,7 +35,6 @@ namespace SpaceShooter.Manager
         public Scrolling Scrolling1 { get; set; }
         public Scrolling Scrolling2 { get; set; }
         public Random rand;
-        public bool HasWon { get; set; }
         public static SpriteManager Instance
         {
             get
@@ -126,6 +125,7 @@ namespace SpaceShooter.Manager
                 AmmoToIncrease = 15,
                 IsControlable = true,
                 IsRemoved = false,
+                Score = 20000
             };
 
             MediaPlayer.IsMuted = false;
@@ -309,7 +309,11 @@ namespace SpaceShooter.Manager
             PostUpdate(gameTime);
             UpgradePlayer();
         }
-
+        public void SetGameSpeed(float value)
+        {
+            if(asteroidSpawntime >= 1)
+                asteroidSpawntime -= value;
+        }
         private void UpgradePlayer()
         {
             int pointsAdded = 2000;
@@ -331,9 +335,7 @@ namespace SpaceShooter.Manager
                 SoundManager.Instance.PlayEffect("upgrade");
                 IsUpgraded = true;
                 messageTimer = 0;
-            }
-            if (Player.Animation == lastAnimation && PointsToUpgrade > 14000)
-                HasWon = true;
+            }            
         }
 
         /// <summary>

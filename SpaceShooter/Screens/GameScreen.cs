@@ -34,9 +34,7 @@ namespace SpaceShooter.Screens
         private Rectangle healthRectangle, healthIconRectangle;
 
         private string gameOver = "Game Over! Do you want to retry?";
-        private string gameWon;
         private bool isOver;
-        private bool hasWon;
         private GameStates gameState;
         private ScoreManager scoreManager;
 
@@ -49,7 +47,6 @@ namespace SpaceShooter.Screens
         {
             gameState = GameStates.Play;
             this.playerName = playerName;
-            gameWon = $"You Won!!Congratz {playerName}";
         }
 
         #region Initialize
@@ -186,14 +183,7 @@ namespace SpaceShooter.Screens
                 else
                 {
                     isOver = false;
-                }
-                if(SpriteManager.Instance.HasWon)
-                {
-                    MediaPlayer.IsMuted = true;
-                    hasWon = true;
-                    SoundManager.Instance.PlayEffect("gameover");
-                }
-
+                }      
 
                 SpriteManager.Instance.Update(gameTime);
                 Camera.Instance.Update(SpriteManager.Instance.Player);
@@ -253,14 +243,7 @@ namespace SpaceShooter.Screens
                     Camera.SCREEN_HEIGHT / 2 - FontManager.Instance.Arial.MeasureString(gameOver).Y), Color.White);
 
                 reload.Draw(gameTime, spriteBatch);
-            }
-            if (hasWon)
-            {
-                spriteBatch.DrawString(FontManager.Instance.Arial, gameOver, new Vector2(Camera.SCREEN_WIDTH / 2 - FontManager.Instance.Arial.MeasureString(gameWon).X / 2,
-                    Camera.SCREEN_HEIGHT / 2 - FontManager.Instance.Arial.MeasureString(gameWon).Y), Color.White);
-
-                reload.Draw(gameTime, spriteBatch);
-            }
+            }            
 
             spriteBatch.End();
         }
