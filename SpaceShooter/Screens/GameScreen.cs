@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using SpaceShooter.Manager;
 using SpaceShooter.Sprites;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceShooter.Screens
 

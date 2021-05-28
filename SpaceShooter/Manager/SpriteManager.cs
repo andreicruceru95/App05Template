@@ -124,8 +124,7 @@ namespace SpaceShooter.Manager
                 Ammo = 100,
                 AmmoToIncrease = 15,
                 IsControlable = true,
-                IsRemoved = false,
-                Score = 20000
+                IsRemoved = false
             };
 
             MediaPlayer.IsMuted = false;
